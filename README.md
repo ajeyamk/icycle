@@ -66,7 +66,7 @@ $ workon demo_sql
 ##### Fetching and Prepping the Project
 * Clone the project
 ```sh
-$ git clone "https://eshan_das@bitbucket.org/ymedialabs/demo_sql-api.git"
+$ git clone "https://github.com/eshandas/django_project_template_sql.git"
 ```
 
 * Rename project directory for consistency and cd
