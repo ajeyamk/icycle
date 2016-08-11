@@ -9,10 +9,6 @@ Following is the tech stack being used for demo_sql project:
 * [Django 1.8]
 * [Django Rest Framework 3.3.3]
 * [PostgreSQL]
-* [HTML5]
-* [CSS3]
-* [Bootstrap 3.3.6]
-* [JQuery 2.2.2]
 
 ### Project Setup
 * Install virtualenv and virtualenvwrapper:
