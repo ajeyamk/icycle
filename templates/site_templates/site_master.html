@@ -1,0 +1,20 @@
+<!doctype html>
+{% load staticfiles %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% block header_block %}{% endblock %}
+    </head>
+    <body>
+        {% block hidden_block %}{% endblock %}
+
+        {% block body_block %}{% endblock %}
+
+        {% block footer_block %}{% endblock %}
+    
+        {% block js_block %}{% endblock %}
+    </body>
+<html>

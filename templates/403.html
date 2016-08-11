@@ -1,0 +1,11 @@
+{% extends 'site_templates/site_master.html' %}
+{% load staticfiles %}
+
+{% block header_block %}
+    <title>403</title>
+{% endblock %}
+
+{% block body_block %}
+    <h3>403! This page is forbidden</h3>
+    <p>{{ message }}</p>
+{% endblock %}
