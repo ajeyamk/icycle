@@ -1,4 +1,4 @@
-# Django Project Template Using SQL and MongoDB
+# Django Project Template Using SQL
 
 ### Version 0.0.1
 
