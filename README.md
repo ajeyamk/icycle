@@ -1,7 +1,6 @@
-# demo_sql
+# Django Project Template Using SQL and MongoDB
 
-### Version
-
+### Version 0.0.1
 
 ### Tech Stack
 
