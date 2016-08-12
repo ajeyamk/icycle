@@ -3,22 +3,20 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
-import uuid
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
             name='AppUser',
             fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, serialize=False, editable=False, primary_key=True)),
                 ('email', models.EmailField(unique=True, max_length=255, verbose_name='email address')),
                 ('first_name', models.CharField(max_length=255)),
                 ('last_name', models.CharField(max_length=255, blank=True)),
@@ -31,7 +29,7 @@ class Migration(migrations.Migration):
                 ('state', models.CharField(max_length=255, blank=True)),
                 ('postal_code', models.CharField(max_length=255, blank=True)),
                 ('country', models.CharField(max_length=255, blank=True)),
-                ('image', models.ImageField(upload_to='customers/profile_pictures', blank=True)),
+                ('image', models.ImageField(upload_to='users/profile_pictures', blank=True)),
                 ('is_active', models.BooleanField(default=True)),
                 ('is_admin', models.BooleanField(default=False)),
                 ('is_verified', models.BooleanField(default=False)),

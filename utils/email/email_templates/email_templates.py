@@ -1,4 +1,4 @@
-class EmailTemplate(object):
+class EmailContainer(object):
     subject = ''
     message = ''
     from_email = 'info@gmail.com'
@@ -7,7 +7,7 @@ class EmailTemplate(object):
     context = None
 
 
-class TestTemplate(EmailTemplate):
+class TestEmail(EmailContainer):
     subject = 'Test mail'
     message = 'Some test body.'
     email_template = 'email_templates/test_template.html'

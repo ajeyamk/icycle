@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import uuid
-
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
@@ -53,10 +51,6 @@ class AppUserManager(BaseUserManager):
 
 
 class AppUser(AbstractBaseUser):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -93,7 +87,7 @@ class AppUser(AbstractBaseUser):
     country = models.CharField(
         max_length=255,
         blank=True)
-    image = models.ImageField(upload_to='customers/profile_pictures', blank=True)
+    image = models.ImageField(upload_to='users/profile_pictures', blank=True)
     roles = models.ManyToManyField(
         Role,
         related_name='role_appuser',

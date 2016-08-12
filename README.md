@@ -228,7 +228,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'demo_sql.settings.stage')
 app = Celery('demo_sql',
              broker='redis://localhost:6379/0',
              backend='redis://localhost:6379/0',
-             include=['utils.indexing_tasks', 'utils.email_tasks'])
+             include=['utils.indexing_tasks', 'utils.email.email_tasks'])
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.

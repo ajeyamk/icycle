@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Used by appauth IP decorator
+ALLOWED_IPS = []
+
 
 # Application definition
 
@@ -72,6 +75,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'demo_sql.wsgi.application'
+
+
+# Tells which model to use as primary User
+AUTH_USER_MODEL = 'appauth.AppUser'
 
 
 # Database
