@@ -1,7 +1,6 @@
-# demo_sql
+# Django Project Template Using SQL
 
-### Version
-
+### Version 0.0.1
 
 ### Tech Stack
 
@@ -10,10 +9,6 @@ Following is the tech stack being used for demo_sql project:
 * [Django 1.8]
 * [Django Rest Framework 3.3.3]
 * [PostgreSQL]
-* [HTML5]
-* [CSS3]
-* [Bootstrap 3.3.6]
-* [JQuery 2.2.2]
 
 ### Project Setup
 * Install virtualenv and virtualenvwrapper:
@@ -67,7 +62,7 @@ $ workon demo_sql
 ##### Fetching and Prepping the Project
 * Clone the project
 ```sh
-$ git clone "https://eshan_das@bitbucket.org/ymedialabs/demo_sql-api.git"
+$ git clone "https://github.com/eshandas/django_project_template_sql.git"
 ```
 
 * Rename project directory for consistency and cd
