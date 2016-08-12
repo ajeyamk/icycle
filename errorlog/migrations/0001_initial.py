@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
+from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
@@ -21,8 +21,8 @@ class Migration(migrations.Migration):
                 ('request_body', models.TextField(blank=True)),
                 ('cookies', models.TextField(blank=True)),
                 ('meta', models.TextField(blank=True)),
-                ('exception_type', models.CharField(max_length=255, blank=True)),
-                ('exception_message', models.CharField(max_length=255, blank=True)),
+                ('exception_type', models.CharField(max_length=2083, blank=True)),
+                ('exception_message', models.CharField(max_length=2083, blank=True)),
                 ('stack_trace', models.TextField(blank=True)),
                 ('user_id', models.CharField(max_length=255, blank=True)),
                 ('user_name', models.CharField(max_length=255, blank=True)),
