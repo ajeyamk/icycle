@@ -6,6 +6,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.3.6/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/jquery-ui-1.11.4.custom/jquery-ui.min.css' %}">
+
         {% block header_block %}{% endblock %}
     </head>
     <body>
@@ -15,6 +18,10 @@
 
         {% block footer_block %}{% endblock %}
     
+        <!-- ----------------------------- JAVASCRIPT SECTION ------------------------------- -->
+        <script type="text/javascript" src="{% static 'plugins/jquery-2.2.2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'plugins/bootstrap-3.3.6/js/bootstrap.js' %}"></script>
+        <script type="text/javascript" src="{% static 'plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js' %}"></script>
         {% block js_block %}{% endblock %}
     </body>
 <html>

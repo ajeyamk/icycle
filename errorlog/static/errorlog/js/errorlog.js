@@ -11,7 +11,7 @@ $(document).ready(function() {
 
             var input = eval('(' + $panelBody.find('#errorCookiesData').val() + ')');
             $panelBody.find('#errorCookies').jsonViewer(input, {collapsed: true});
-            debugger;
+
             var input = eval('(' + $panelBody.find('#errorBodyData').val() + ')');
             $panelBody.find('#errorBody').jsonViewer(input, {collapsed: true});
 
