@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Point the BASE_DIR towards root
+BASE_DIR = os.path.dirname(os.path.realpath(os.path.dirname(__file__) + "/.."))
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_user_agents',
+    'django.contrib.humanize',
     'appauth',
     'errorlog',
 )
@@ -54,14 +57,16 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'errorlog.middleware.errormiddleware.ErrorMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'demo_sql.urls'
 
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')    # Absolute path to the templates directory
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_PATH, ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,5 +105,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
+# STATIC_ROOT = ''   STATIC_ROOT can be found in respective setting files
 STATIC_URL = '/static/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+STATIC_PATH = os.path.join(BASE_DIR, 'site_static')    # Absolute path to the static directory
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)

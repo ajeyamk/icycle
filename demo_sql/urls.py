@@ -15,6 +15,15 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from .views import home, health
+
 urlpatterns = [
+    url(r'^$', home, name='home'),
+    url(r'^health/$', health, name='health'),
+
+    # --- Admin Urls --- #
     url(r'^admin/', include(admin.site.urls)),
+
+    # --- Errors Urls --- #
+    url(r'^errors/', include('errorlog.urls', namespace='errorlog')),
 ]

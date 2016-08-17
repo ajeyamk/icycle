@@ -6,13 +6,10 @@
 
 
     <link rel="stylesheet" href="{% static 'plugins/highlightjs/highlight.min.css' %}" />
-    <script src="{% static 'plugins/highlightjs/highlight.min.js' %}"></script>
+    
 
     <link rel="stylesheet" href="{% static 'plugins/jquery.json-viewer/jquery.json-viewer.css' %}">
-    <script src="{% static 'plugins/jquery.json-viewer/jquery.json-viewer.js' %}"></script>
-
-    <script src="{% static 'errorlog/js/errorlog.js' %}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    
 {% endblock %}
 
 {% block body_block %}
@@ -189,4 +186,12 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block js_block %}
+    <script src="{% static 'plugins/highlightjs/highlight.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery.json-viewer/jquery.json-viewer.js' %}"></script>
+
+    <script src="{% static 'errorlog/js/errorlog.js' %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}

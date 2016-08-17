@@ -8,11 +8,11 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# INSTALLED_APPS += (
-#     'debug_toolbar',
-#     'debug_panel',
-#     'django_extensions',
-# )
+INSTALLED_APPS += (
+    'debug_toolbar',
+    'debug_panel',
+    'django_extensions',
+)
 
 
 MIDDLEWARE_CLASSES += [
