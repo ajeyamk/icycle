@@ -1,10 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-
-from django.utils.decorators import method_decorator
-from appauth.decorators import valid_ip_access
-
 from django.views.generic import View
 
 from django.contrib.auth import authenticate, login, logout
@@ -16,12 +12,10 @@ class LoginView(View):
     """
     template_name = 'appauth/login.html'
 
-    @method_decorator(valid_ip_access)
     def get(self, request):
         context = {}
         return render(request, self.template_name, context)
 
-    @method_decorator(valid_ip_access)
     def post(self, request):
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)

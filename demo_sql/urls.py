@@ -25,5 +25,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     # --- Errors Urls --- #
+    url(r'^auth/', include('appauth.urls', namespace='appauth')),
+
+    # --- Errors Urls --- #
     url(r'^errors/', include('errorlog.urls', namespace='errorlog')),
 ]
