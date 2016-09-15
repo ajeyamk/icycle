@@ -1,4 +1,4 @@
-from demo_sql.settings.base import *
+from main.settings.base import *
 
 
 # SECURITY WARNING: don't run with debug turned on in production!

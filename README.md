@@ -4,7 +4,7 @@
 
 ### Tech Stack
 
-Following is the tech stack being used for demo_sql project:
+Following is the tech stack being used for main project:
 
 * [Django 1.8]
 * [Django Rest Framework 3.3.3]
@@ -49,12 +49,12 @@ $ source ~/.bashrc
 
 * Create new virtual environment
 ```sh
-$ mkvirtualenv demo_sql
+$ mkvirtualenv main
 ```
 
 * Activate the virtual environment
 ```sh
-$ workon demo_sql
+$ workon main
 ```
 
 > Gunicorn will be installed while installing requirements
@@ -67,8 +67,8 @@ $ git clone "https://github.com/eshandas/django_project_template_sql.git"
 
 * Rename project directory for consistency and cd
 ```sh
-$ mv demo_sql-api/ demo_sql
-$ cd demo_sql
+$ mv main-api/ main
+$ cd main
 ```
 
 > Make sure that correct setting file is pointed in **manage.py** and **wsgi.py** files
@@ -128,8 +128,8 @@ $ sudo nano /etc/elasticsearch/elasticsearch.yml
 * Add node info
 ```
 ...
-node.name: "demo_sqlNode"
-cluster.name: demo_sqlcluster1
+node.name: "mainNode"
+cluster.name: maincluster1
 ...
 ...
 index.number_of_shards: 1
@@ -223,9 +223,9 @@ import os
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'demo_sql.settings.stage')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings.stage')
 
-app = Celery('demo_sql',
+app = Celery('main',
              broker='redis://localhost:6379/0',
              backend='redis://localhost:6379/0',
              include=['utils.indexing_tasks', 'utils.email.email_tasks'])
@@ -273,10 +273,10 @@ $ python manage.py migrate
 
 * Run Celery server (inside virtualenv) and it will start listening for new tasks
 ```sh
-$ celery -A demo_sql worker -l info
+$ celery -A main worker -l info
 ```
 
 * Run Celery beat (inside virtualenv) and it will start scheduling tasks
 ```sh
-$ celery -A demo_sql beat -l info
+$ celery -A main beat -l info
 ```
