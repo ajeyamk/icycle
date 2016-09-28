@@ -15,7 +15,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from django.conf import settings
+
 from .views import home, health
+
+v1 = settings.VERSION['v1']
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -26,6 +30,7 @@ urlpatterns = [
 
     # --- Errors Urls --- #
     url(r'^auth/', include('appauth.urls', namespace='appauth')),
+    url(r'^api/%s/auth/' % v1, include('appauth.api_urls', namespace='appauth_api')),
 
     # --- Errors Urls --- #
     url(r'^errors/', include('errorlog.urls', namespace='errorlog')),

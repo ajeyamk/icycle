@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_user_agents',
     'django.contrib.humanize',
+    'rest_framework',
     'appauth',
     'errorlog',
 )
@@ -102,6 +103,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+VERSION = {
+    'v1': '0.1',
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
