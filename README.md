@@ -8,6 +8,8 @@ A boilerplate for Django Project with SQL. There is sample app named as Posts fo
 
 The project is AWS ready and can be deployed in minutes.
 
+The project is also ready for scrapy, haystack, mongodb and celery. These can be configured in minutes as well.
+
 Look at Swagger docs for API details at /api/#/
 
 ### Posts App
