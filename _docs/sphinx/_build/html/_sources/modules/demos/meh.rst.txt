@@ -1,0 +1,8 @@
+Demos
+=====
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Engines:
+
+    product_similarity/meh

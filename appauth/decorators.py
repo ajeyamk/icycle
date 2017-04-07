@@ -51,6 +51,21 @@ def ip_access(function):
     return _arguments_wrapper
 
 
+def logged_in_access(function):
+    """
+    A method decorator allowing only Logged in users to access a method.
+    """
+    def _arguments_wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return function(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('http_403'))
+
+    _arguments_wrapper.__doc__ = function.__doc__
+    _arguments_wrapper.__name__ = function.__name__
+    return _arguments_wrapper
+
+
 def admin_access(function):
     """
     A method decorator allowing only Admins to access a method.

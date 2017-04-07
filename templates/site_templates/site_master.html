@@ -14,25 +14,9 @@
     <body>
         {% block hidden_block %}{% endblock %}
 
-        <div class="container-fluid">
-            <!-- ----------------------------- HEAD SECTION ------------------------------- -->
-            {% if user.is_authenticated %}
-                <p>Hello, {{ user.name }}</p>
-                <p>
-                    <a href="{% url 'appauth:logout' %}">Logout</a>
-                </p>
-            {% else %}
-                <p>
-                    <a href="{% url 'appauth:login' %}">Login</a>
-                </p>
-            {% endif %}
+        {% block body_block %}{% endblock %}
 
-            <!-- ----------------------------- BODY SECTION ------------------------------- -->
-            {% block body_block %}{% endblock %}
-
-            <!-- ----------------------------- FOOTER SECTION ------------------------------- -->
-            {% block footer_block %}{% endblock %}
-        </div>
+        {% block footer_block %}{% endblock %}
     
         <!-- ----------------------------- JAVASCRIPT SECTION ------------------------------- -->
         <script type="text/javascript" src="{% static 'plugins/jquery-2.2.2.min.js' %}"></script>

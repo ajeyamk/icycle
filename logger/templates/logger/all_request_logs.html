@@ -1,0 +1,181 @@
+{% extends 'site_templates/site_master.html' %}
+{% load staticfiles %}
+
+{% block header_block %}
+  <title>Server Logs</title>
+
+
+  <link rel="stylesheet" href="{% static 'plugins/highlightjs/highlight.min.css' %}" />
+  
+
+  <link rel="stylesheet" href="{% static 'plugins/jquery.json-viewer/jquery.json-viewer.css' %}">
+  
+{% endblock %}
+
+{% block body_block %}
+  <h2>Server Logs</h2>
+  <div class="panel-group" id="accordion">
+    {% for log in logs %}
+      <div class="panel 
+          {% if log.response_status >= 400 %}
+            panel-danger
+          {% elif log.response_status >= 300 %}
+            panel-warning
+          {% elif log.response_status >= 200 %}
+            panel-success
+          {% else %}
+            panel-default
+          {% endif %}">
+        <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#log{{ log.id }}" style="cursor: pointer;">
+          <div class="row">
+            <div class="col-md-4">
+              <h4 class="panel-title"><b>Status: {{ log.response_status }} {{ log.response_reason }}</b></h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <b>Url:</b> {{ log.method }} {{ log.url }}
+            </div>
+            <div class="col-md-4">
+              <b>Time:</b> {{ log.response_time }} ms
+            </div>
+            <div class="col-md-4">
+              <b>{{ log.created_on }}</b>
+            </div>
+          </div>
+        </div>
+        <div id="log{{ log.id }}" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-2">
+                <b>Message:</b>
+              </div>
+              <div class="col-md-10">
+                <pre>{{ log.message }}</pre>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <b>User Id:</b>
+              </div>
+              <div class="col-md-10">
+                <pre>{{ log.user_id }}</pre>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <b>User Name:</b>
+              </div>
+              <div class="col-md-10">
+                <pre>{{ log.user_name }}</pre>
+              </div>
+            </div>
+
+
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#request{{ log.id }}">Request</a></li>
+              <li><a data-toggle="tab" href="#response{{ log.id }}">Response</a></li>
+            </ul>
+            <div class="tab-content">
+
+              <div id="request{{ log.id }}" class="tab-pane fade in active">
+                <h3>Request</h3>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Url:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <pre>{{ log.url }}</pre>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Data:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <input type="hidden" id="logRequestDataData" value="{{ log.request_data }}" />
+                    <pre id="logRequestData" style="padding-left: 3%;"></pre>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Headers:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <input type="hidden" id="logRequestHeadersData" value="{{ log.request_headers }}" />
+                    <pre id="logRequestHeaders" style="padding-left: 3%;"></pre>
+                  </div>
+                </div>
+              </div>
+
+
+              <div id="response{{ log.id }}" class="tab-pane fade">
+                <h3>Response</h3>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Body:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <input type="hidden" id="logResponseTextData" value="{{ log.response_text }}" />
+                    <pre id="logResponseText" style="padding-left: 3%;"></pre>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Status:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <pre><code>{{ log.response_status }} {{ log.response_reason }}</code></pre>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b>Time:</b>
+                  </div>
+                  <div class="col-md-10">
+                    <pre><code>{{ log.response_time }} ms</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              
+
+
+            
+
+
+            
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+      <ul class="pagination pagination-md">
+        {% if logs.has_previous %}
+          <li><a href="?page={{ logs.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="disabled"><a href="#">Page {{ logs.number }} of {{ logs.paginator.num_pages }}</a></li>
+        {% if logs.has_next %}
+          <li><a href="?page={{ logs.next_page_number }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="col-md-2">
+      <form action="{% url 'logger:all_request_logs' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger pull-right">Delete All</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js_block %}
+  <script src="{% static 'plugins/highlightjs/highlight.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery.json-viewer/jquery.json-viewer.js' %}"></script>
+
+  <script src="{% static 'logger/js/all_request_logs.js' %}"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}

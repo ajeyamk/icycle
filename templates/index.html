@@ -1,0 +1,19 @@
+{% extends 'site_templates/site_master.html' %}
+{% load staticfiles %}
+
+{% block header_block %}
+    <title>Welcome!</title>
+{% endblock %}
+
+{% block body_block %}
+    <h1>Welcome to Project</h1>
+    <p>
+        <a href="{% url 'admin:login' %}">Admin</a>
+    </p>
+    <p>
+        <a href="{% url 'swagger' %}">Swagger</a>
+    </p>
+    <p>
+        <a href="{% url 'posts:all_posts' %}">Posts</a>
+    </p>
+{% endblock %}

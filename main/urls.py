@@ -13,25 +13,31 @@ Including another URLconf
     1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
-
 from django.conf import settings
 
-from .views import home, health
+from .views import IndexView, health
+from django.contrib import admin
+
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Project API')
 
 v1 = settings.VERSION['v1']
 
+
 urlpatterns = [
-    url(r'^$', home, name='home'),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', IndexView.as_view(), name='index'),
+    url(r'^api/$', schema_view, name='swagger'),
     url(r'^health/$', health, name='health'),
 
-    # --- Admin Urls --- #
-    url(r'^admin/', include(admin.site.urls)),
-
-    # --- Errors Urls --- #
-    url(r'^auth/', include('appauth.urls', namespace='appauth')),
+    # --- Appauth
     url(r'^api/%s/auth/' % v1, include('appauth.api_urls', namespace='appauth_api')),
 
-    # --- Errors Urls --- #
-    url(r'^errors/', include('errorlog.urls', namespace='errorlog')),
+    # --- Posts
+    url(r'^posts/', include('posts.urls', namespace='posts')),
+    url(r'^api/%s/posts/' % v1, include('posts.api_urls', namespace='posts_api')),
+
+    # --- Errorlog
+    url(r'^logs/', include('logger.urls', namespace='logger')),
 ]

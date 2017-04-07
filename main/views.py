@@ -1,10 +1,15 @@
 from django.shortcuts import render
+from django.views.generic import View
+
 from django.http import HttpResponse
 
 
-def home(request):
-    return render(request, 'global/home.html', {})
+class IndexView(View):
+    template_name = 'index.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
 
 
 def health(request):
-    return HttpResponse("Server seems to be working fine")
+    return HttpResponse('Seems to be working fine')

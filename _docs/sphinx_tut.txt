@@ -1,0 +1,1 @@
+See here: http://www.marinamele.com/2014/03/document-your-django-projects.html

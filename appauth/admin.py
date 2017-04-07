@@ -4,7 +4,10 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import Role, AppUser
+from .models import (
+    Role,
+    AppUser,
+)
 
 
 class UserCreationForm(forms.ModelForm):
@@ -15,7 +18,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = AppUser
-        fields = ('email', 'date_of_birth')
+        fields = ('email', )
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -43,7 +46,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = AppUser
-        fields = ('email', 'password', 'date_of_birth', 'is_active', 'is_admin')
+        fields = ('email', 'password', 'is_active', 'is_admin')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -65,9 +68,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': (
-            'first_name', 'last_name', 'sex', 'date_of_birth', 'phone_number', 'image',
-            'address_line_1', 'address_line_2', 'city', 'state',
-            'postal_code', 'country', 'is_verified')}),
+            'first_name', 'last_name', 'phone_number', 'is_verified')}),
         ('Permissions', {'fields': ('is_admin', 'roles', 'is_active')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -75,7 +76,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'date_of_birth', 'password1', 'password2')}),
+            'fields': ('email', 'password1', 'password2')}),
     )
     search_fields = ('email',)
     ordering = ('email',)

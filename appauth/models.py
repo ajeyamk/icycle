@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager,
@@ -56,38 +55,17 @@ class AppUser(AbstractBaseUser):
         max_length=255,
         unique=True)
     first_name = models.CharField(
-        max_length=255)
+        max_length=255,
+        blank=True)
     last_name = models.CharField(
         max_length=255,
         blank=True)
-    sex = models.CharField(
-        max_length=1,
-        blank=True)
-    date_of_birth = models.DateField(
-        blank=True,
-        null=True)
     phone_number = models.CharField(
         max_length=20,
         blank=True)
-    address_line_1 = models.CharField(
+    zip_code = models.CharField(
         max_length=255,
         blank=True)
-    address_line_2 = models.CharField(
-        max_length=255,
-        blank=True)
-    city = models.CharField(
-        max_length=255,
-        blank=True)
-    state = models.CharField(
-        max_length=255,
-        blank=True)
-    postal_code = models.CharField(
-        max_length=255,
-        blank=True)
-    country = models.CharField(
-        max_length=255,
-        blank=True)
-    image = models.ImageField(upload_to='users/profile_pictures', blank=True)
     roles = models.ManyToManyField(
         Role,
         related_name='role_appuser',
@@ -102,12 +80,6 @@ class AppUser(AbstractBaseUser):
         auto_now_add=True)
     updated_on = models.DateTimeField(
         auto_now=True)
-    reset_password_token = models.CharField(
-        max_length=8,
-        blank=True)
-    last_updated_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, blank=True,
-        null=True, related_name='updated_by_user')
 
     objects = AppUserManager()
 
@@ -123,16 +95,16 @@ class AppUser(AbstractBaseUser):
         # The user is identified by their email address
         return self.email
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):  # __unicode__ on Python 2
         return self.email
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
+        'Does the user have a specific permission?'
         # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        'Does the user have permissions to view the app `app_label`?'
         # Simplest possible answer: Yes, always
         return True
 
@@ -141,11 +113,11 @@ class AppUser(AbstractBaseUser):
 
     @property
     def name(self):
-        return self.first_name + ' ' + self.last_name
+        return '%s %s' % (self.first_name, self.last_name)
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
+        'Is the user a member of staff?'
         # Simplest possible answer: All admins are staff
         return self.is_admin
 

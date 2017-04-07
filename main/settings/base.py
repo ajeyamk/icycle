@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-# Point the BASE_DIR towards root
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.realpath(os.path.dirname(__file__) + "/.."))
 
 
@@ -21,15 +21,7 @@ BASE_DIR = os.path.dirname(os.path.realpath(os.path.dirname(__file__) + "/.."))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '37pviyu2usys*((gwyzlbvh4$s3idy6k&b&e$108e0w-r!b2dd'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-# Used by appauth IP decorator
-ALLOWED_IPS = []
+SECRET_KEY = '*po#e#9e277)@@b$dnc=ai1w#!49-g_%v^xa3!6twpr!rwj$g('
 
 
 # Application definition
@@ -41,15 +33,23 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_user_agents',
-    'django.contrib.humanize',
     'rest_framework',
+    'rest_framework_swagger',
+    'ckeditor',
+    'corsheaders',
+    'django_user_agents',
+    'djcelery',
+    'django.contrib.humanize',
     'appauth',
-    'errorlog',
+    'logger',
+    'app_meta',
+    'posts',
 )
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Ensure CorsMiddleware is above CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -57,18 +57,22 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'errorlog.middleware.errormiddleware.ErrorMiddleware',
+    'logger.middleware.errormiddleware.ErrorMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
-]
+)
 
 ROOT_URLCONF = 'main.urls'
 
-TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')    # Absolute path to the templates directory
+# Template paths
+# Absolute path to the templates directory
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_PATH, ],
         'APP_DIRS': True,
+        'DIRS': [
+            TEMPLATE_PATH,
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -80,15 +84,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main.wsgi.application'
+
+# WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Tells which model to use as primary User
 AUTH_USER_MODEL = 'appauth.AppUser'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -107,8 +109,13 @@ VERSION = {
     'v1': '0.1',
 }
 
+LOGIN_URL = '/admin/login/'
+LOGOUT_URL = '/admin/logout/'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+# Give absolute directory while in production. This is where all static files will reside
 # STATIC_ROOT = ''   STATIC_ROOT can be found in respective setting files
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
@@ -119,3 +126,50 @@ STATIC_PATH = os.path.join(BASE_DIR, 'site_static')    # Absolute path to the st
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+
+# List of site admins
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+    ('John Doe', 'johndoe@gmail.com'),
+)
+
+
+# CORS related settings
+
+# Change this in production! And use the following
+# CORS_ORIGIN_WHITELIST = (
+#         'google.com',
+#         'hostname.example.com'
+#     )
+# https://github.com/ottoyiu/django-cors-headers/
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken',
+    'sessionid',
+)
+CORS_EXPOSE_HEADERS = (
+    'set-cookie',
+    'sessionid',
+    'csrftoken',
+)
+
+
+# Celery related settings
+# task result life time until they will be deleted
+CELERY_TASK_RESULT_EXPIRES = 7 * 86400  # 7 days
+# needed for worker monitoring
+CELERY_SEND_EVENTS = True
+# where to store periodic tasks (needed for scheduler)
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+
+# add following lines to the end of settings.py
+import djcelery
+djcelery.setup_loader()
