@@ -2,7 +2,7 @@
 
 ### About
 
-A boilerplate for Django Project with SQL
+A boilerplate for Django Project with SQL. There is sample app named as Posts for reference.
 
 Look at Swagger docs for API details at /api/#/
 
@@ -162,8 +162,9 @@ Not required for now. Check _docs in case if needed.
 ##### Setup Supervisord
 Not required for now. Check _docs in case if needed.
 
-##### Reset processes
-```sh
-sudo service gunicorn restart
-sudo service nginx restart
-```
+##### Documentation
+This application uses Sphinx for complete documentation and Django Rest Swagger for documenting APIs.
+
+* Sphinx: Please have a look at /_docs/sphinx/_build/html/index.html for Sphinx documentation.
+
+* Swagger: Please visit 127.0.0.1:8000/api/ for Swagger documentation

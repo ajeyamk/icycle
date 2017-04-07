@@ -10,8 +10,7 @@ Welcome to Project Documentation!
     :maxdepth: 2
     :caption: Contents:
 
-    modules/partners/index
-    modules/demos/index
+    modules/posts/index
 
 
 Indices and tables

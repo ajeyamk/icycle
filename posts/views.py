@@ -16,7 +16,7 @@ from utils.pagination import PaginationKeys
 
 class AllPostsView(View):
     """
-    A view for handling posts.
+    A view for getting all posts.
     """
     template_name = 'posts/all_posts.html'
 
@@ -40,6 +40,9 @@ class AllPostsView(View):
 
 
 class PostView(View):
+    """
+    A view to get a post.
+    """
     template_name = 'posts/post.html'
 
     def get(self, request, post_id):

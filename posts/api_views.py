@@ -27,7 +27,8 @@ class AllPostsAPI(APIView):
     """
     API to get all posts or to add a new one.
 
-    > NOTE: The user must be logged in to create a new post.
+    NOTE: The user must be logged in to create a new post.
+
     """
     authentication_classes = (SessionAuthenticationUnsafeMethods, )
     serializer_class = PostSerializer
@@ -97,7 +98,7 @@ class PostAPI(APIView):
     """
     An API to get, update or delete a post by its ID.
 
-    > NOTE: The user must be logged in to create, update or delete a post.
+    NOTE: The user must be logged in to create, update or delete a post.
     """
     authentication_classes = (SessionAuthenticationUnsafeMethods, )
     serializer_class = PostSerializer

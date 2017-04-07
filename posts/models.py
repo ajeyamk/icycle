@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from ckeditor.fields import RichTextField
 
 
 class Post(models.Model):
@@ -26,7 +25,7 @@ class Post(models.Model):
         choices=CATEGORIES,
         blank=True,
         null=True)
-    body = RichTextField(
+    body = models.TextField(
         help_text='The actual body of the post.',
         blank=True)
     is_active = models.BooleanField(
