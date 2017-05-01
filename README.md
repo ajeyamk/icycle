@@ -35,8 +35,8 @@ A sample app for reference, which covers all the major aspects of Django develop
 
 Following is the tech stack being used for main project:
 
-* [Django 1.8] - The core Web Framework
-* [Django Rest Framework 3.3.3] - For creating REST APIs
+* [Django 1.11] - The core Web Framework
+* [Django Rest Framework 3.5.3] - For creating REST APIs
 * [Sqlite] - As datastore
 * [Celery 3.1.23] - A task queue used for async processes and task scheduling
 * [Redis 2.8.4] - As message broker, a result backend for Celery and for caching
