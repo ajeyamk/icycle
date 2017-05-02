@@ -1,11 +1,15 @@
 import traceback
 import json
-
 import requests
+import logging
 
 from .models import (
     Log,
     RequestLog,
+)
+from .serializers import (
+    LogSerializer,
+    RequestLogSerializer,
 )
 
 
@@ -17,7 +21,18 @@ class NoExceptionException(Exception):
     pass
 
 
+class NotLogObjException(Exception):
+    pass
+
+
+class NotRequestLogObjException(Exception):
+    pass
+
+
 class ObjectLogger(object):
+    """
+    The actual logger to log request, response and exception info.
+    """
     def log_request(self, log=None, request=None, request_body=None):
         # -- General info
         log.request_url = request.get_full_path()
@@ -32,9 +47,10 @@ class ObjectLogger(object):
         log.meta = log.meta.replace('\\', '|')
 
         # --- User info
-        if request.user and request.user.is_authenticated():
-            log.user_id = request.user.id
-            log.user_name = request.user.email
+        if request.user is not None:
+            if request.user.is_authenticated():
+                log.user_id = request.user.id
+                log.user_name = request.user.email
 
         # --- User agent info
         user_agent = request.user_agent
@@ -69,8 +85,28 @@ class ObjectLogger(object):
 
         return log
 
+    def save_log(self, log=None, log_level=Log.INFO):
+        if type(log) == Log:
+            log.save()
+            serializer = LogSerializer(log)
+            logger = logging.getLogger('loggly_logs')
+            if log_level == Log.ERROR:
+                logger.error(serializer.data)
+            elif log_level == Log.DEBUG:
+                logger.debug(serializer.data)
+            elif log_level == Log.WARN:
+                logger.warn(serializer.data)
+            elif log_level == Log.INFO:
+                logger.info(serializer.data)
+        else:
+            raise NotLogObjException('Object passed is not a Log object')
+        return log
+
 
 class Logger(object):
+    """
+    Static methods to call underlying Logger without instantiating the class
+    """
     @staticmethod
     def log_error(request=None, request_body=None, exception=None):
         if request and exception:
@@ -81,7 +117,7 @@ class Logger(object):
             log = obj_logger.log_request(log, request, request_body)
 
             # --- Save
-            log.save()
+            log = obj_logger.save_log(log, Log.ERROR)
         elif request is None:
             raise NoRequestException('No http request found')
         elif exception is None:
@@ -103,7 +139,7 @@ class Logger(object):
             log = obj_logger.log_request(log, request, request.body)
 
             # --- Save
-            log.save()
+            log = obj_logger.save_log(log, Log.DEBUG)
             return log
         else:
             raise NoRequestException('No http request found')
@@ -122,7 +158,7 @@ class Logger(object):
             log = obj_logger.log_request(log, request, request.body)
 
             # --- Save
-            log.save()
+            log = obj_logger.save_log(log, Log.WARN)
             return log
         else:
             raise NoRequestException('No http request found')
@@ -141,27 +177,40 @@ class Logger(object):
             log = obj_logger.log_request(log, request, request.body)
 
             # --- Save
-            log.save()
+            log = obj_logger.save_log(log, Log.INFO)
             return log
         else:
             raise NoRequestException('No http request found')
 
-    @staticmethod
-    def non_request_log(log_level=None, message=None):
-        stack_trace = ''.join(line for line in traceback.format_stack())
-        message = message if message else ""
-        # -- General info
-        log = Log(
-            log_level=log_level if log_level else Log.INFO,
-            message=message,
-            stack_trace=stack_trace)
 
-        # --- Save
-        log.save()
-        return log
+class EmptyResponse(object):
+    """
+    Creates an empty response object in case the request failed.
+    """
+
+    def __init__(self, text, status_code, reason, request):
+        self.text = text
+        self.status_code = status_code
+        self.reason = reason
+        self.elapsed = None
+        self.request = request
+
+
+class EmptyRequest(object):
+    """
+    Creates an empty request object in case the request failed.
+    """
+
+    def __init__(self, url, method):
+        self.url = url
+        self.method = method
+        self.headers = {}
 
 
 class RequestObjectLogger(object):
+    """
+    The actual logger to log Requests request and response.
+    """
     def log_request(self, log, request, data):
         # --- Request data
         log.method = request.method
@@ -177,10 +226,10 @@ class RequestObjectLogger(object):
         log.response_text = response.text
         log.response_status = response.status_code
         log.response_reason = response.reason
-        log.response_time = response.elapsed.microseconds / 1000
+        log.response_time = response.elapsed.microseconds / 1000 if response.elapsed else 0
 
         # --- User data
-        if user:
+        if user is not None:
             if user.is_authenticated():
                 log.user_id = user.id
                 log.user_name = user.email
@@ -188,95 +237,163 @@ class RequestObjectLogger(object):
 
         return log
 
+    def save_log(self, log=None):
+        if type(log) == RequestLog:
+            log.save()
+            serializer = RequestLogSerializer(log)
+            logger = logging.getLogger('loggly_logs')
+            logger.info(serializer.data)
+        else:
+            raise NotRequestLogObjException('Object passed is not a RequestLog object')
+
 
 class RequestLogger(object):
     @staticmethod
-    def get(url, params=None, user=None, message=None, **kwargs):
-        response = requests.get(url, params=params, **kwargs)
+    def get(url, params=None, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.get(url, params=params, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='GET')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
         log = RequestLog()
-
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, params)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response
 
     @staticmethod
-    def post(url, data=None, json=None, user=None, message=None, **kwargs):
-        response = requests.post(url, data=data, json=None, **kwargs)
-        log = RequestLog()
+    def post(url, data=None, json=None, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.post(url, data=data, json=None, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='POST')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
+        log = RequestLog()
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, data)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response
 
     @staticmethod
-    def put(url, data=None, json=None, user=None, message=None, **kwargs):
-        response = requests.put(url, data=data, json=None, **kwargs)
-        log = RequestLog()
+    def put(url, data=None, json=None, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.put(url, data=data, json=None, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='PUT')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
+        log = RequestLog()
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, data)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response
 
     @staticmethod
-    def delete(url, user=None, message=None, **kwargs):
-        response = requests.delete(url, **kwargs)
-        log = RequestLog()
+    def delete(url, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.delete(url, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='DELETE')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
+        log = RequestLog()
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, None)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response
 
     @staticmethod
-    def patch(url, data=None, json=None, user=None, message=None, **kwargs):
-        response = requests.patch(url, data=data, json=None, **kwargs)
-        log = RequestLog()
+    def patch(url, data=None, json=None, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.patch(url, data=data, json=None, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='PATCH')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
+        log = RequestLog()
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, data)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response
 
     @staticmethod
-    def head(url, user=None, message=None, **kwargs):
-        response = requests.head(url, **kwargs)
-        log = RequestLog()
+    def head(url, user=None, message=None, timeout=60, **kwargs):
+        try:
+            response = requests.head(url, timeout=timeout, **kwargs)
+        except requests.exceptions.Timeout:
+            request = EmptyRequest(
+                url=url,
+                method='HEAD')
+            response = EmptyResponse(
+                text='',
+                status_code=504,
+                reason='HTTP TIMEOUT ERROR',
+                request=request)
 
+        log = RequestLog()
         obj_logger = RequestObjectLogger()
 
         log = obj_logger.log_request(log, response.request, None)
         log = obj_logger.log_response(log, response, user, message)
 
         # --- Save
-        log.save()
+        obj_logger.save_log(log=log)
 
         return response

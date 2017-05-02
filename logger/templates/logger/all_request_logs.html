@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block header_block %}
-  <title>Server Logs</title>
+  <title>Server Request Logs</title>
 
 
   <link rel="stylesheet" href="{% static 'plugins/highlightjs/highlight.min.css' %}" />
@@ -13,7 +13,39 @@
 {% endblock %}
 
 {% block body_block %}
-  <h2>Server Logs</h2>
+  <h2>Server Request Logs</h2>
+
+  <form class="form-inline" action="{% url 'logger:all_request_logs' %}" method="GET">
+    <h3>Filters</h3>
+    <div class="form-group">
+      <label for="method">Log Level:</label>
+      <select id="method" name="method" class="form-control">
+        <option value="">All</option>
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select id="status" name="status" class="form-control">
+        <option value="">All</option>
+        <option value="200">> 200</option>
+        <option value="300">> 300</option>
+        <option value="400">> 400</option>
+        <option value="500">> 500</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="url">Url:</label>
+      <input type="text" class="form-control" id="url" name="url">
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+
+  <br /><br />
+
   <div class="panel-group" id="accordion">
     {% for log in logs %}
       <div class="panel 
@@ -155,18 +187,18 @@
     <div class="col-md-10">
       <ul class="pagination pagination-md">
         {% if logs.has_previous %}
-          <li><a href="?page={{ logs.previous_page_number }}">Previous</a></li>
+          <li><a href="?page={{ logs.previous_page_number }}{{ query_string }}">Previous</a></li>
         {% endif %}
         <li class="disabled"><a href="#">Page {{ logs.number }} of {{ logs.paginator.num_pages }}</a></li>
         {% if logs.has_next %}
-          <li><a href="?page={{ logs.next_page_number }}">Next</a></li>
+          <li><a href="?page={{ logs.next_page_number }}{{ query_string }}">Next</a></li>
         {% endif %}
       </ul>
     </div>
     <div class="col-md-2">
-      <form action="{% url 'logger:all_request_logs' %}" method="POST">
+      <form  id="deleteLogs" action="{% url 'logger:all_request_logs' %}" method="POST">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger pull-right">Delete All</button>
+        <a id="btnDeleteLogs" class="btn btn-danger pull-right">Delete All</a>
       </form>
     </div>
   </div>

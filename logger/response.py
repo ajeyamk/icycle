@@ -17,7 +17,9 @@ class Response(DrfResponse):
     Wrapper around Django Rest Framework Response class. Can take one or a list of logs and logs the response.
     No overhead if no logs are passed.
     """
-    def __init__(self, data, status=None, template_name=None, headers=None, content_type=None, logs=None):
+
+    def __init__(self, data, status=None, template_name=None, headers=None, content_type=None, logs=None,
+                 is_response=True):
         if logs:
             obj_logger = ObjectLogger()
             if not isinstance(logs, list):
@@ -27,15 +29,16 @@ class Response(DrfResponse):
                     log,
                     data if isinstance(data, str) else json.dumps(data, default=decimal_default),
                     status=str(status),
-                    headers=headers,
+                    headers=headers if is_response else '',
                     content_type=str(content_type))
                 log.save()
-        super(Response, self).__init__(
-            data,
-            status=status,
-            template_name=template_name,
-            headers=headers,
-            content_type=content_type)
+        if is_response:
+            super(Response, self).__init__(
+                data,
+                status=status,
+                template_name=template_name,
+                headers=headers,
+                content_type=content_type)
 
 
 def render(request, template_name, context=None, content_type=None, status=None, using=None, logs=None):

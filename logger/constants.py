@@ -1,0 +1,12 @@
+class Keys():
+    ERROR = 'ERROR'
+    DEBUG = 'DEBUG'
+    WARN = 'WARN'
+    INFO = 'INFO'
+    URL = 'url'
+    LOG_LEVEL = 'level'
+    REQUEST_METHOD = 'method'
+    RESPONSE_STATUS = 'status'
+    PAGE = 'page'
+    SHOW = 'show'
+    ALL = 'all'

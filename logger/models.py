@@ -8,6 +8,7 @@ class Log(models.Model):
     DEBUG = 2
     WARN = 3
     INFO = 4
+    GENERIC = 5
     LOG_LEVELS = (
         (ERROR, 'ERROR'),
         (DEBUG, 'DEBUG'),
