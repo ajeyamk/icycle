@@ -20,12 +20,12 @@ from .api_views import PingCelery
 from django.contrib import admin
 
 from django_rest_swagger_enhancer.schema_generator import get_swagger_view, CustomSchemaGenerator
+
 schema_view = get_swagger_view(title='Django Boilerplate', generator_class=CustomSchemaGenerator)
 
 v1 = settings.VERSION['v1']
 
 admin.site.site_header = 'Django Boilerplate'
-
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -35,19 +35,19 @@ urlpatterns = [
     url(r'^ping-celery/', PingCelery.as_view(), name='ping_celery'),
 
     # --- Appauth
-    url(r'^api/%s/auth/' % v1, include('appauth.api_urls', namespace='appauth_api')),
+    url(r'^api/auth/', include('appauth.api_urls', namespace='appauth_api')),
 
     # --- Posts
-    url(r'^posts/', include('posts.urls', namespace='posts')),
-    url(r'^api/%s/posts/' % v1, include('posts.api_urls', namespace='posts_api')),
+    # url(r'^posts/', include('posts.urls', namespace='posts')),
+    # url(r'^api/%s/posts/' % v1, include('posts.api_urls', namespace='posts_api')),
 
     # --- Errorlog
     url(r'^logs/', include('simple_django_logger.urls', namespace='logger')),
 ]
 
-
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+                      url(r'^__debug__/', include(debug_toolbar.urls)),
+                  ] + urlpatterns

@@ -2,18 +2,53 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
+from django.core.exceptions import ValidationError
 
-from utils.response_handler import generic_response
-
+from utils.response_handler import ResponseHandler
 from .serializers import (
     AppUserSerializer,
 )
-
 from .constants import (
-    FailMessages,
     ResponseKeys,
+    FailureMessages, RequestKeys)
+from .api_authentication import (
+    CsrfExemptSessionAuthentication,
 )
+
+
+class RegisterUser(APIView):
+    """
+    API for user registration
+    """
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    serializer_class = AppUserSerializer
+
+    def post(self, request):
+        if any(request.data):
+            serializer = self.serializer_class(data=request.data)
+            password = request.data.get(RequestKeys.PASSWORD.value)
+            if serializer.is_valid():
+                user = serializer.save()
+                user.set_password(password)
+                user.save()
+                try:
+                    user.full_clean()
+                except ValidationError as e:
+                    return Response(ResponseHandler.get_result(FailureMessages.TECHNICAL_ERROR.value),
+                                    status=status.HTTP_400_BAD_REQUEST)
+                login(request, user)
+                request.session.save()
+                context = {
+                    ResponseKeys.USER.value: serializer.data,
+                    ResponseKeys.SESSION_ID.value: request.session.session_key}
+                return Response(context, status=status.HTTP_200_OK)
+            else:
+                return Response(ResponseHandler.get_result(dict(serializer.errors).values()[0]),
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value),
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginAPI(APIView):
@@ -70,18 +105,6 @@ class LoginAPI(APIView):
 
 class LogoutAPI(APIView):
     def post(self, request):
-        """
-        # API through which a user can logout.
-
-        Logs a user out. Destroys the session.
-
-        **Header**:
-
-            {
-                "Content-Type": "application/json",
-                "sessionId": "token"
-            }
-        """
         context = {"loggedOut": True}
         return Response(
             context,

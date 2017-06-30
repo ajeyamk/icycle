@@ -1,8 +1,19 @@
-class FailMessages(object):
+from enum import Enum
+
+
+class FailureMessages(Enum):
     USER_INACTIVE = 'This user is not active'
     INVALID_CREDENTIALS = 'Wrong username/password'
+    INVALID_INPUT = 'Invalid input'
+    TECHNICAL_ERROR = 'Error while saving the user'
+    EMAIL_ALREADY_EXISTS = 'Email already exists'
 
 
-class ResponseKeys(object):
-    SESSION_ID = 'sessionId'
+class ResponseKeys(Enum):
+    SESSION_ID = 'token'
+    USER = 'user'
+
+
+class RequestKeys(Enum):
+    PASSWORD = 'password'
     USER = 'user'

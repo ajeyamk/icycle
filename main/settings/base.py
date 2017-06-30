@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'appauth',
     'app_meta',
-    'posts',
+    'product_categories',
+    'products',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser
 )
+import uuid
 
 
 class Role(models.Model):
@@ -20,6 +21,7 @@ class Role(models.Model):
 
 
 class AppUserManager(BaseUserManager):
+
     def create_user(self, email, first_name, last_name, password=None):
         """
         Creates and saves a User with the given email, date of
@@ -50,6 +52,9 @@ class AppUserManager(BaseUserManager):
 
 
 class AppUser(AbstractBaseUser):
+    encrypted_id = models.UUIDField(
+        default=uuid.uuid4,
+        blank=False)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -63,23 +68,25 @@ class AppUser(AbstractBaseUser):
     phone_number = models.CharField(
         max_length=20,
         blank=True)
-    zip_code = models.CharField(
-        max_length=255,
-        blank=True)
     roles = models.ManyToManyField(
         Role,
         related_name='role_appuser',
         blank=True)
     is_active = models.BooleanField(
-        default=True)
+        default=True
+    )
     is_admin = models.BooleanField(
-        default=False)
+        default=False
+    )
     is_verified = models.BooleanField(
-        default=False)
+        default=False
+    )
     added_on = models.DateTimeField(
-        auto_now_add=True)
+        auto_now_add=True
+    )
     updated_on = models.DateTimeField(
-        auto_now=True)
+        auto_now=True
+    )
 
     objects = AppUserManager()
 
@@ -113,7 +120,7 @@ class AppUser(AbstractBaseUser):
 
     @property
     def name(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return '%s %s' % (self.name, )
 
     @property
     def is_staff(self):

@@ -7,30 +7,16 @@ from fabric.api import *
 
 
 STAGES = {
-    'dev': {
-        'hosts': ['xxxxxxxxxxxxxxxxxxx.compute.amazonaws.com'],
-        'code_dir': '~/sites/Project/',
-        'code_branch': 'dev',
-        'virtual_env': '. /usr/local/bin/virtualenvwrapper.sh; workon Project',
-        'user': 'ubuntu',
-    },
-    'staging': {
-        'hosts': ['xxxxxxxxxxxxxxxxxxx.compute.amazonaws.com'],
-        'code_dir': '~/sites/project/',
-        'code_branch': 'staging',
-        'virtual_env': '. /usr/local/bin/virtualenvwrapper.sh; workon project',
-        'user': 'ubuntu',
-    },
     'production': {
-        'hosts': ['xxxxxxxxxxxxxxxxxxx.compute.amazonaws.com'],
-        'code_dir': '~/sites/project/',
+        'hosts': ['ec2-18-220-53-253.us-east-2.compute.amazonaws.com'],
+        'code_dir': '~/sites/icycle/',
         'code_branch': 'master',
-        'virtual_env': '. /usr/local/bin/virtualenvwrapper.sh; workon project',
+        'virtual_env': '. /usr/local/bin/virtualenvwrapper.sh; workon icycle',
         'user': 'ubuntu',
     },
 }
 
-LOCAL_PEM_PATH = '/home/yml/Documents/Stuff/Project/'
+LOCAL_PEM_PATH = '/home/ymedia/Downloads/hackathon/'
 FIXTURE_DIR = '/home/yml/Documents/Stuff/Project/fixtures/'
 DOCS_DIR = '/home/yml/Documents/Stuff/Project/_docs/sphinx/'
 
@@ -43,7 +29,7 @@ def stage_set(stage_name='dev'):
 
 def dev():
     # Add key to ssh
-    local('ssh-add %s%s' % (LOCAL_PEM_PATH, 'dev-project.pem'))
+    local('ssh-add %s%s' % (LOCAL_PEM_PATH, 'dev.pem'))
     stage_set('dev')
 
 
@@ -94,9 +80,9 @@ def update():
             # run('python manage.py test')
             run('sudo service gunicorn restart')
             run('sudo service nginx restart')
-            run('supervisorctl restart celeryd')
-            run('supervisorctl restart beatd')
-            run('supervisorctl restart celerycamd')
+            # run('supervisorctl restart celeryd')
+            # run('supervisorctl restart beatd')
+            # run('supervisorctl restart celerycamd')
 
 
 def deploy():
