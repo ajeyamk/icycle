@@ -1,6 +1,6 @@
 # Django Boilerplate local setup
 
-### Version 0.1
+### Version 1.0.0
 
 ### About
 
