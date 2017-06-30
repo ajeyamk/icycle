@@ -30,28 +30,12 @@ HAYSTACK_CONNECTIONS = {
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': '<backend_engine_name>',
-        'NAME': '<db_name>',
-        'USER': '<db_user>',
-        'PASSWORD': '<password>',
-        'HOST': '<host>',
-        'PORT': '<port>',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'icycle_db',
+        'USER': 'icycle_db_user',
+        'PASSWORD': 'icycle_db_password',
+        'HOST': 'icycle.cylwbz3rz1yz.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
-
-# AWS Settings
-AWS_ACCESS_KEY_ID = 'xxxxxxxxxxxxxx'
-AWS_SECRET_ACCESS_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-
-
-# Email server settings
-# ABSOLUTELY REMOVE THE DUMMY EMAIL SERVER IN PRODUCTION!!!
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'xxxxxxxxxxxxxx'
-EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-EMAIL_FROM = 'someone@somewhere.com'
