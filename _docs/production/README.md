@@ -44,39 +44,39 @@ Following is the tech stack being used for the project:
 
 ### Project Setup
 * Update ubuntu
-```sh
+```
 sudo apt-get update
 ```
 
 * Install python-pip
-```sh
+```
 sudo apt-get install python-pip python-dev nginx git
 sudo apt-get install build-essential libssl-dev libffi-dev
 ```
 
 * Install virtualenv and virtualenvwrapper:
-```sh
+```
 sudo pip install virtualenv virtualenvwrapper
 sudo pip install --upgrade pip
 ```
 
 * Create a backup of the .bashrc file
-```sh
+```
 cp ~/.bashrc ~/.bashrc-org
 ```
 
 * Create a directory to store all the virtual environments
-```sh
+```
 mkdir ~/.virtualenvs
 ```
 
 * Set WORKON_HOME to virtual environments directory
-```sh
+```
 export WORKON_HOME=~/.virtualenvs
 ```
 
 * Open bashrc file
-```sh
+```
 sudo nano ~/.bashrc
 ```
 
@@ -86,17 +86,17 @@ sudo nano ~/.bashrc
 ```
 
 * Re-source terminal using the following command
-```sh
+```
 source ~/.bashrc
 ```
 
 * Create new virtual environment
-```sh
+```
 mkvirtualenv project
 ```
 
 * Activate the virtual environment
-```sh
+```
 workon project
 ```
 
@@ -104,22 +104,22 @@ workon project
 
 ##### Fetching and Prepping the Project
 * Create a parent folder called sites
-```sh
+```
 mkdir sites && cd sites
 ```
 
 * Clone the project
-```sh
+```
 git clone https://eshan_scientist@bitbucket.org/scientisttechnologies/project_api.git
 ```
 
 * Rename project directory for consistency and cd
-```sh
+```
 mv project_api/ project && cd project
 ```
 
 * Point the local settings file in the virtualenv postactivate hook
-```sh
+```
 deactivate
 sudo nano ~/.virtualenvs/project/bin/postactivate
 ```
@@ -131,7 +131,7 @@ export DJANGO_SETTINGS_MODULE=main.settings.dev
 ```
 
 * Remove the pointer once the env is deactivated
-```sh
+```
 sudo nano ~/.virtualenvs/project/bin/postdeactivate
 ```
 
@@ -145,17 +145,17 @@ unset DJANGO_SETTINGS_MODULE
 > NOTE: Install the following dependencies before installing Pillow:
 
 
-```sh
+```
 sudo apt-get install libjpeg-dev libfreetype6-dev zlib1g-dev
 ```
 
 * Install all the requirements
-```sh
+```
 workon project
 pip install -r requirements/server.txt
 ```
 **NOTE:** If scipy installation throws MemoryError, add swap memory. Install htop and check
-```sh
+```
 sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
 sudo /sbin/mkswap /var/swap.1
 sudo /sbin/swapon /var/swap.1
@@ -163,17 +163,17 @@ sudo apt-get install htop
 ```
 
 * Run migrations
-```sh
+```
 python manage.py migrate
 ```
 
 * Collect all the static files
-```sh
+```
 python manage.py collectstatic
 ```
 
 * Test by running
-```sh
+```
 python manage.py runserver 0.0.0.0:8000
 ```
 
@@ -183,12 +183,12 @@ python manage.py runserver 0.0.0.0:8000
 Celery requires a message broker to be setup. Celery right now fully supports RabbitMQ and Redis. The other broker supports are not managed actively. In this project we are using Redis as the message broker. It will also work as the backend for Celery. In future we also intend to use Redis for caching.
 
 * Install Redis
-```sh
+```
 sudo apt-get install redis-server
 ```
 
 * Check if Redis is running
-```sh
+```
 redis-benchmark -q -n 1000 -c 10 -P 5
 ```
 
@@ -211,7 +211,7 @@ MSET (10 keys): 166666.67 requests per second
 ```
 
 * Install Celery (If you ran pip requirements, this would already have been installed)
-```sh
+```
 pip install django-celery
 pip install -U celery[redis]
 ```
@@ -269,22 +269,22 @@ djcelery.setup_loader()
 ```
 
 * Run migrate and it will create 
-```sh
+```
 python manage.py migrate
 ```
 
 * Run and test Celery worker (inside virtualenv) and it will start listening for new tasks
-```sh
+```
 celery -A main worker -l info
 ```
 
 * Run and test Celery beat (inside virtualenv) and it will start scheduling tasks
-```sh
+```
 celery -A main beat -l info
 ```
 
 * Test if Gunicorn can serve the Django pages
-```sh
+```
 /home/ubuntu/.virtualenvs/project/bin/gunicorn --bind 0.0.0.0:8000 main.wsgis.dev:application
 ```
 
@@ -292,7 +292,7 @@ celery -A main beat -l info
 
 ##### Install Upstart for 16.04 (Ignore if using Ubuntu 14.04)
 Upstart has been removed after 14.04. Install it by
-```sh
+```
 sudo apt-get install upstart-sysv
 ```
 
@@ -300,14 +300,14 @@ sudo apt-get install upstart-sysv
 
 * Update the Ubuntu system to reflect the changes
 
-```sh
+```
 sudo update-initramfs -u
 ```
 
 ##### Setting up Gunicorn
 * Create and open an Upstart file for Gunicorn with sudo privileges
 
-```sh
+```
 sudo nano /etc/init/gunicorn.conf
 ```
 
@@ -331,7 +331,7 @@ exec /home/ubuntu/.virtualenvs/project/bin/gunicorn --workers 3 --bind unix:/hom
 
 * Start the Gunicorn service
 
-```sh
+```
 sudo service gunicorn start
 ```
 >NOTE: Check error log by **sudo tail -f /var/log/upstart/gunicorn.log**
@@ -340,7 +340,7 @@ sudo service gunicorn start
 ##### Setting up Nginx
 * Start by creating and opening a new server block in Nginx's sites-available directory
 
-```sh
+```
 sudo nano /etc/nginx/sites-available/project
 ```
 
@@ -375,26 +375,26 @@ server {
 
 * Enable the file by linking it to the sites-enabled directory:
 
-```sh
+```
 sudo ln -s /etc/nginx/sites-available/project /etc/nginx/sites-enabled
 ```
 
 * Remove the default file from "sites-enabled"
 
-```sh
+```
 sudo rm /etc/nginx/sites-available/default
 sudo rm /etc/nginx/sites-enabled/default
 ```
 
 * Test your Nginx configuration for syntax errors by typing:
 
-```sh
+```
 sudo nginx -t
 ```
 
 * If no errors are reported, go ahead and restart Nginx by typing:
 
-```sh
+```
 sudo service nginx restart
 ```
 >NOTE: Check out the log file by **sudo tail -f /var/log/nginx/error.log**
@@ -403,13 +403,13 @@ sudo service nginx restart
 
 * Create supervisor config file if it doesn't exist (in project root folder)
 
-```sh
+```
 echo_supervisord_conf > supervisord.conf
 ```
 
 * Unlink supervisord config for celery after cleaning. Go to project root and execute the following
 
-```sh
+```
 sudo unlink /var/run/supervisor.sock
 sudo unlink /tmp/supervisor.sock
 nano supervisord.conf
@@ -507,18 +507,18 @@ events=PROCESS_STATE_EXITED
 
 * Create a folder to hold the log files
 
-```sh
+```
 mkdir /home/ubuntu/sites/logs/
 ```
 
 * Start all Supervisord processes
 
-```sh
+```
 supervisord
 ```
 
 ##### Reset processes
-```sh
+```
 sudo service gunicorn restart
 sudo service nginx restart
 supervisorctl restart celeryd

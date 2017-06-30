@@ -5,21 +5,20 @@ from main.settings.base import *
 DEBUG = True
 
 
+INTERNAL_IPS = ['127.0.0.1']
+
+
 ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS += (
     'debug_toolbar',
-    'debug_panel',
-    'django_extensions',
 )
 
 
 MIDDLEWARE_CLASSES += (
-    'debug_panel.middleware.DebugPanelMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
-
-DEBUG_TOOLBAR_MONGO_STACKTRACES = True
 
 
 # Haystack connection
@@ -41,16 +40,6 @@ DATABASES = {
     }
 }
 
-
-# Partner details
-PARTNER_KEYS = {
-    'shopify': {
-        'api_key': '4c29c1a4d513e3b8d4bc5328b9b0bfc4',
-        'shared_secret': 'aa0755c246fc6f7a4dcceb0c61085313'
-    }
-}
-
-
 # AWS Settings
 AWS_ACCESS_KEY_ID = 'xxxxxxxxxxxxxx'
 AWS_SECRET_ACCESS_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
@@ -63,6 +52,6 @@ EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'AKIAIGMGOKA7WFT7UBMQ'
-EMAIL_HOST_PASSWORD = 'AuOSUNAbvq8IhSUPcPmQiyUEUk86Xtmq+hadQEpZQnWn'
-EMAIL_FROM = 'eshan@scientist-tech.com'
+EMAIL_HOST_USER = 'xxxxxxxxxxxxxx'
+EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+EMAIL_FROM = 'someone@somewhere.com'

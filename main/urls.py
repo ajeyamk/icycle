@@ -16,13 +16,15 @@ from django.conf.urls import include, url
 from django.conf import settings
 
 from .views import IndexView, health
+from .api_views import PingCelery
 from django.contrib import admin
 
-from rest_framework_swagger.views import get_swagger_view
-
-schema_view = get_swagger_view(title='Project API')
+from django_rest_swagger_enhancer.schema_generator import get_swagger_view, CustomSchemaGenerator
+schema_view = get_swagger_view(title='Django Boilerplate', generator_class=CustomSchemaGenerator)
 
 v1 = settings.VERSION['v1']
+
+admin.site.site_header = 'Django Boilerplate'
 
 
 urlpatterns = [
@@ -30,6 +32,7 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^api/$', schema_view, name='swagger'),
     url(r'^health/$', health, name='health'),
+    url(r'^ping-celery/', PingCelery.as_view(), name='ping_celery'),
 
     # --- Appauth
     url(r'^api/%s/auth/' % v1, include('appauth.api_urls', namespace='appauth_api')),
@@ -39,5 +42,12 @@ urlpatterns = [
     url(r'^api/%s/posts/' % v1, include('posts.api_urls', namespace='posts_api')),
 
     # --- Errorlog
-    url(r'^logs/', include('logger.urls', namespace='logger')),
+    url(r'^logs/', include('simple_django_logger.urls', namespace='logger')),
 ]
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

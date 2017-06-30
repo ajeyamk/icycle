@@ -43,39 +43,39 @@ Following is the tech stack being used for main project:
 
 ### Project Setup
 * Update ubuntu
-```sh
+```
 sudo apt-get update
 ```
 
 * Install python-pip
-```sh
+```
 sudo apt-get install python-pip python-dev git
 sudo apt-get install build-essential libssl-dev libffi-dev
 ```
 
 * Install virtualenv and virtualenvwrapper:
-```sh
+```
 sudo pip install virtualenv virtualenvwrapper
 sudo pip install --upgrade pip
 ```
 
 * Create a backup of the .bashrc file
-```sh
+```
 cp ~/.bashrc ~/.bashrc-org
 ```
 
 * Create a directory to store all the virtual environments
-```sh
+```
 mkdir ~/.virtualenvs
 ```
 
 * Set WORKON_HOME to virtual environments directory
-```sh
+```
 export WORKON_HOME=~/.virtualenvs
 ```
 
 * Open bashrc file
-```sh
+```
 sudo nano ~/.bashrc
 ```
 
@@ -85,39 +85,39 @@ sudo nano ~/.bashrc
 ```
 
 * Re-source terminal using the following command
-```sh
+```
 source ~/.bashrc
 ```
 
 * Create new virtual environment
-```sh
+```
 mkvirtualenv project
 ```
 
 * Activate the virtual environment
-```sh
+```
 workon project
 ```
 
 
 ##### Fetching and Prepping the Project
 * Create a parent folder called sites
-```sh
+```
 mkdir sites && cd sites
 ```
 
 * Clone the project
-```sh
+```
 git clone https://eshan_scientist@bitbucket.org/scientisttechnologies/project_api.git
 ```
 
 * Rename project directory for consistency and cd
-```sh
+```
 mv project_api/ project && cd project
 ```
 
 * Point the local settings file in the virtualenv postactivate hook
-```sh
+```
 deactivate
 sudo nano ~/.virtualenvs/project/bin/postactivate
 ```
@@ -129,7 +129,7 @@ export DJANGO_SETTINGS_MODULE=main.settings.local
 ```
 
 * Remove the pointer once the env is deactivated
-```sh
+```
 sudo nano ~/.virtualenvs/project/bin/postdeactivate
 ```
 
@@ -143,17 +143,17 @@ unset DJANGO_SETTINGS_MODULE
 > NOTE: Install the following dependencies before installing Pillow:
 
 
-```sh
+```
 sudo apt-get install libjpeg-dev libfreetype6-dev zlib1g-dev
 ```
 
 * Install all the requirements
-```sh
+```
 workon project
-pip install -r requirements/server.txt
+pip install -r requirements/local.txt
 ```
 **NOTE:** If scipy installation throws MemoryError, add swap memory. Install htop and check
-```sh
+```
 sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
 sudo /sbin/mkswap /var/swap.1
 sudo /sbin/swapon /var/swap.1
@@ -161,12 +161,12 @@ sudo apt-get install htop
 ```
 
 * Run migrations
-```sh
+```
 python manage.py migrate
 ```
 
 * Test by running
-```sh
+```
 python manage.py runserver
 ```
 

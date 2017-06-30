@@ -35,13 +35,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
+    'simple_django_logger',
     'ckeditor',
     'corsheaders',
     'django_user_agents',
     'djcelery',
     'django.contrib.humanize',
     'appauth',
-    'logger',
     'app_meta',
     'posts',
 )
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'logger.middleware.errormiddleware.ErrorMiddleware',
+    'simple_django_logger.middleware.errormiddleware.ErrorMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
 )
 
