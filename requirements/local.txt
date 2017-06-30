@@ -7,23 +7,24 @@ celery==3.1.23
 coreapi==2.1.1
 Django==1.11
 django-celery==3.1.17
-django-ckeditor==5.1.1
+django-ckeditor==5.2.2
 django-cors-headers==1.1.0
 #--- ONLY FOR LOCAL
 django-debug-panel==0.8.3
 #--- ONLY FOR LOCAL
-django-debug-toolbar==1.4
+django-debug-toolbar==1.8
 django-extensions==1.6.7
 django-ses==0.8.1
 django-smtp-ssl==1.0
 django-user-agents==0.3.0
 djangorestframework==3.5.3
 django-rest-swagger==2.1.1
+django_rest_swagger_enhancer==0.0.2
 #--- ONLY FOR LOCAL
 Fabric==1.12.0
 gunicorn==19.4.5
 #--- ONLY FOR LOCAL
-ipdb==0.10.1
+ipdb==0.10.3
 pathlib2==2.1.0
 Pillow==3.2.0
 #--- ONLY FOR LOCAL

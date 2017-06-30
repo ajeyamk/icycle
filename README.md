@@ -1,10 +1,10 @@
-# Project API local setup
+# Django Boilerplate local setup
 
 ### Version 0.1
 
 ### About
 
-A boilerplate for Django Project with SQL. There is sample app named as Posts for reference.
+A boilerplate for Django Project. There is sample app named as Posts for reference.
 
 The project is AWS ready and can be deployed in minutes.
 

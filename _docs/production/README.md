@@ -1,21 +1,29 @@
-# Project APIs
+# Django Boilerplate
 
 ### About
 
-API srvices for Project Demo System
+A boilerplate for Django Project. There is sample app named as Posts for reference.
 
-### Version 0.0.1
+The project is AWS ready and can be deployed in minutes.
+
+The project is also ready for scrapy, haystack, mongodb and celery. These can be configured in minutes as well.
+
+Look at Swagger docs for API details at /api/#/
+
+### Version 0.1
 
 ### Tech Stack
 
 Following is the tech stack being used for the project:
 
-* [Django 1.8] - The core Web Framework
-* [Django Rest Framework 3.3.3] - For creating REST APIs
-* [PostgreSql Database] - As datastore
+* [Django 1.11] - The core Web Framework
+* [Django Rest Framework 3.5.3] - For creating REST APIs
+* [Sqlite] - As datastore
 * [Celery 3.1.23] - A task queue used for async processes and task scheduling
 * [Redis 2.8.4] - As message broker, a result backend for Celery and for caching
 * [Ubuntu 14.04] - As the operating system
+* Gunicorn
+* Nginx
 
 ### References
 ##### Installing Nginx in Ubuntu 14.04
