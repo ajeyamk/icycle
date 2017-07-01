@@ -55,6 +55,8 @@ class ProductDropAPI(APIView):
                 new_user_point = UserProducts.calculate_user_points(user_product)
                 user_product.status = UserProducts.PRODUCT_STATUS[2][0]
                 user_product.save()
+                product.is_active = True
+                product.save()
                 return Response(
                     ResponseHandler.get_result(SuccesMessages.PRODUCT_REDEEMED.value % new_user_point),
                     status=status.HTTP_200_OK)
@@ -95,3 +97,18 @@ class Dashboard(APIView):
             data = {}
         resultNode[ResponseKeys.CATEGORIES.value] = data_node
         return Response(resultNode, status=status.HTTP_200_OK)
+
+
+class RedeemCoupoun(APIView):
+    authentication_classes = (SessionAuthenticationAllMethods,)
+
+    def get(self, request):
+        if request.user.user_point > 50.0:
+            request.user.user_point = 0
+            request.user.save()
+            return Response(
+                ResponseHandler.get_result(SuccesMessages.REDEEM_MESSAGE.value % request.user.first_name),
+                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value),
+                            status=status.HTTP_400_BAD_REQUEST)
