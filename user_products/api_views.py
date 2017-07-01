@@ -23,7 +23,7 @@ class PurchaseProductAPI(APIView):
         except Products.DoesNotExist:
             return Response(
                 ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value), status=status.HTTP_400_BAD_REQUEST)
-        if UserProducts.objects.filter(user=request.user, product=product).exists():
+        if UserProducts.objects.filter(product=product, status=UserProducts.PRODUCT_STATUS[0][0]).exists():
             return Response(
                 ResponseHandler.get_result(FailureMessages.USER_ALREADY_LINKED.value),
                 status=status.HTTP_400_BAD_REQUEST)
