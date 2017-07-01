@@ -18,7 +18,7 @@ class ResponseKeys(Enum):
 
 class SuccesMessages(Enum):
     PRODUCT_ASSIGNED = 'Product assigned to the user'
-    PRODUCT_REDEEMED = 'Thank you for joining the movement. You\'ve now earned %d points'
+    PRODUCT_REDEEMED = 'Thank you for joining the movement. You now have %d points'
     PROMOCODE_ADDED = 'Promo code applied successfully'
     REDEEM_MESSAGE = '%s , you\'ve made it.Hope to see you soon'
 
