@@ -16,11 +16,16 @@ class PurchaseProductAPI(APIView):
 
     def post(self, request):
         product_id = request.data.get(RequestKeys.PRODUCT_ID.value, None)
+
         try:
             product = Products.objects.get(code=product_id)
         except Products.DoesNotExist:
             return Response(
                 ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value), status=status.HTTP_400_BAD_REQUEST)
+        if UserProducts.objects.filter(user=request.user, product=product).exists():
+            return Response(
+                ResponseHandler.get_result(FailureMessages.USER_ALREADY_LINKED.value),
+                status=status.HTTP_400_BAD_REQUEST)
         if not product.is_active:
             return Response(
                 ResponseHandler.get_result(FailureMessages.PRODUCT_IN_USE.value), status=status.HTTP_400_BAD_REQUEST)
@@ -42,7 +47,7 @@ class ProductDropAPI(APIView):
             product = Products.objects.get(code=product_id)
         except Products.DoesNotExist:
             return Response(
-                ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value), status=status.HTTP_200_OK)
+                ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value), status=status.HTTP_400_BAD_REQUEST)
         if not product.is_active:
             user_product = UserProducts.objects.get(product=product)
             if user_product.status == UserProducts.PRODUCT_STATUS[0][0]:
@@ -51,10 +56,16 @@ class ProductDropAPI(APIView):
                 user_product.save()
                 return Response(
                     ResponseHandler.get_result(SuccesMessages.PRODUCT_REDEEMED.value % new_user_point),
-                    status=status.HTTP_400_BAD_REQUEST)
+                    status=status.HTTP_200_OK)
             else:
                 return Response(ResponseHandler.get_result(FailureMessages.CORRUPTED_PRODUCT.value),
                                 status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(ResponseHandler.get_result(FailureMessages.INACTIVE_PRODUCT.value),
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+# class Dashboard(APIView):
+#     authentication_classes = (SessionAuthenticationAllMethods,)
+#
+#     def get(self, request):

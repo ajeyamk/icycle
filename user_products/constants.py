@@ -15,6 +15,7 @@ class SuccesMessages(Enum):
 class FailureMessages(Enum):
     INVALID_PROMO_CODE = 'Invalid promo code'
     INVALID_INPUT = 'Invalid input'
+    USER_ALREADY_LINKED = 'Invalid operation.User has been already linked to the product.'
     INACTIVE_PRODUCT = 'Inactive product'
     CORRUPTED_PRODUCT = ' Corrupted Product or Product hasn\'t been purchased'
     PROMOCODE_ALREADY_USED = 'Promo code already used'
