@@ -21,7 +21,6 @@ class Role(models.Model):
 
 
 class AppUserManager(BaseUserManager):
-
     def create_user(self, email, first_name, last_name, password=None):
         """
         Creates and saves a User with the given email, date of
@@ -87,6 +86,11 @@ class AppUser(AbstractBaseUser):
     updated_on = models.DateTimeField(
         auto_now=True
     )
+    user_point = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        default=0.0
+    )
 
     objects = AppUserManager()
 
@@ -96,7 +100,7 @@ class AppUser(AbstractBaseUser):
 
     def get_full_name(self):
         # The user is identified by their email address
-        return self.name
+        return self.first_name
 
     def get_short_name(self):
         # The user is identified by their email address
@@ -120,7 +124,7 @@ class AppUser(AbstractBaseUser):
 
     @property
     def name(self):
-        return '%s %s' % (self.name, )
+        return '%s %s' % (self.first_name, self.last_name)
 
     @property
     def is_staff(self):

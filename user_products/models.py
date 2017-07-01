@@ -1,4 +1,5 @@
 from django.db import models
+from appauth.models import AppUser
 from products.models import Products
 
 
@@ -31,3 +32,12 @@ class UserProducts(models.Model):
             status=UserProducts.PRODUCT_STATUS[0][0]
         ).save()
 
+    @staticmethod
+    def calculate_user_points(user_product):
+        # Categories.objects.get(id=product.categories)
+        refundable_amount = user_product.product.category.refundable_amount
+        user = AppUser.objects.get(id=user_product.user.id)
+        new_user_point = user.user_point + refundable_amount
+        user.user_point = new_user_point
+        user.save()
+        return new_user_point
