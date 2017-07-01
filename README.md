@@ -1,4 +1,4 @@
-# Django Boilerplate local setup
+# Django iCycle 
 
 ### Version 1.0.0
 
