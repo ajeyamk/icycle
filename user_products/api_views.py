@@ -108,7 +108,7 @@ class RedeemCoupoun(APIView):
             request.user.save()
             return Response(
                 ResponseHandler.get_result(SuccesMessages.REDEEM_MESSAGE.value % request.user.first_name),
-                status=status.HTTP_400_BAD_REQUEST)
+                status=status.HTTP_200_OK)
         else:
             return Response(ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value),
                             status=status.HTTP_400_BAD_REQUEST)
