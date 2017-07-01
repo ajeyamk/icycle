@@ -4,17 +4,13 @@ from main.settings.base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 INTERNAL_IPS = ['127.0.0.1']
 
-
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS += (
     'debug_toolbar',
 )
-
 
 MIDDLEWARE_CLASSES += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',

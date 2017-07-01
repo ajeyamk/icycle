@@ -24,3 +24,7 @@ class Products(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def calculate_count(status, ids):
+        return Products.objects.filter(id__in=ids, category_id=status).count()
