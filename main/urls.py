@@ -40,6 +40,9 @@ urlpatterns = [
     # --- Products
     url(r'^api/products/', include('products.api_urls', namespace='products')),
 
+    # --- User Products
+    url(r'^api/user-products/', include('user_products.api_urls', namespace='user_products')),
+
     # --- Errorlog
     url(r'^logs/', include('simple_django_logger.urls', namespace='logger')),
 ]

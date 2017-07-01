@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'app_meta',
     'product_categories',
     'products',
+    'user_products',
 )
 
 MIDDLEWARE_CLASSES = (

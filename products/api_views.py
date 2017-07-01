@@ -11,7 +11,7 @@ from utils.response_handler import ResponseHandler
 
 class GenerateProductsAPI(APIView):
     """
-    An API for creating promo codes, tied to Django admin
+    An API for creating products codes, tied to Django admin
     """
     authentication_classes = (AdminAuthenticationAllMethods,)
 
