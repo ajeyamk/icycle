@@ -1,8 +1,6 @@
 from django.db import models
-from product_categories.models import Categories
 
-
-class Products(models.Model):
+class UserProducts(models.Model):
     category = models.ForeignKey(
         Categories,
         related_name='category_type'
@@ -17,10 +15,3 @@ class Products(models.Model):
     added_on = models.DateTimeField(
         auto_now_add=True
     )
-
-    class Meta:
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
-
-    def __str__(self):
-        return self.name

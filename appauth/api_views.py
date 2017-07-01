@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 
 from utils.response_handler import ResponseHandler
@@ -11,10 +11,10 @@ from .serializers import (
 )
 from .constants import (
     ResponseKeys,
-    FailureMessages, RequestKeys)
+    FailureMessages, RequestKeys, SuccesMessages)
 from .api_authentication import (
     CsrfExemptSessionAuthentication,
-)
+    SessionAuthenticationAllMethods)
 
 
 class RegisterUser(APIView):
@@ -53,59 +53,41 @@ class RegisterUser(APIView):
 
 class LoginAPI(APIView):
     serializer_class = AppUserSerializer
+    authentication_classes = (CsrfExemptSessionAuthentication,)
 
     def post(self, request):
-        """
-        # API through which a user can login.
-
-        Logs a user in. Creates a session and sends back the session token along with user data.
-        This token is expected for all authenticated APIs.
-
-        **Header**:
-
-            {
-                "Content-Type": "application/json"
-            }
-
-        **Data**:
-
-            {
-                "username": "eshan@scientist-tech.com",
-                "password": "abc123"
-            }
-        """
-        email = request.data.get('email', None)
-        password = request.data.get('password', None)
+        email = request.data.get(RequestKeys.EMAIL.value, None)
+        password = request.data.get(RequestKeys.PASSWORD.value, None)
         if email and password:
             user = authenticate(email=email, password=password)
             if user:
-                if user.is_active:
-                    login(request, user)
-                    request.session.save()
-                    serializer = self.serializer_class(user)
-                    context = {
-                        ResponseKeys.SESSION_ID: request.session.session_key,
-                        ResponseKeys.USER: serializer.data}
-                    return Response(
-                        context,
-                        status=status.HTTP_200_OK)
-                else:
-                    return Response(
-                        generic_response(FailMessages.USER_INACTIVE),
-                        status=status.HTTP_400_BAD_REQUEST)
+                login(request, user)
+                request.session.save()
+                serializer = self.serializer_class(user)
+                context = {
+                    ResponseKeys.SESSION_ID.value: request.session.session_key,
+                    ResponseKeys.USER.value: serializer.data}
+                return Response(
+                    context,
+                    status=status.HTTP_200_OK)
             else:
                 return Response(
-                    generic_response(FailMessages.INVALID_CREDENTIALS),
+                    ResponseHandler.get_result(FailureMessages.INVALID_CREDENTIALS.value),
                     status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
-                generic_response(FailMessages.INVALID_CREDENTIALS),
+                ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value),
                 status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAPI(APIView):
-    def post(self, request):
-        context = {"loggedOut": True}
+    """
+    An API for logging out a user.
+    """
+    authentication_classes = (SessionAuthenticationAllMethods,)
+
+    def delete(self, request):
+        logout(request)
         return Response(
-            context,
+            ResponseHandler.get_result(SuccesMessages.USER_LOGGED_OUT.value),
             status=status.HTTP_200_OK)

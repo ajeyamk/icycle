@@ -9,6 +9,10 @@ class FailureMessages(Enum):
     EMAIL_ALREADY_EXISTS = 'Email already exists'
 
 
+class SuccesMessages(Enum):
+    USER_LOGGED_OUT = 'User logged out'
+
+
 class ResponseKeys(Enum):
     SESSION_ID = 'token'
     USER = 'user'
@@ -17,3 +21,4 @@ class ResponseKeys(Enum):
 class RequestKeys(Enum):
     PASSWORD = 'password'
     USER = 'user'
+    EMAIL = 'email'

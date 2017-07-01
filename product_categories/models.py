@@ -4,8 +4,8 @@ from django.db import models
 class Categories(models.Model):
     CATEGORY_TYPES = (
         (1, 'Plastic Bottle'),
-        (2, 'Carry bags'),
-        (3, 'Containers')
+        (2, 'Cardboard'),
+        (3, 'Cans')
     )
     name = models.CharField(
         max_length=255,

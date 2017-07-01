@@ -21,11 +21,11 @@ from django.contrib import admin
 
 from django_rest_swagger_enhancer.schema_generator import get_swagger_view, CustomSchemaGenerator
 
-schema_view = get_swagger_view(title='Django Boilerplate', generator_class=CustomSchemaGenerator)
+schema_view = get_swagger_view(title='Django iCycle', generator_class=CustomSchemaGenerator)
 
 v1 = settings.VERSION['v1']
 
-admin.site.site_header = 'Django Boilerplate'
+admin.site.site_header = 'Django iCycle'
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -37,9 +37,8 @@ urlpatterns = [
     # --- Appauth
     url(r'^api/auth/', include('appauth.api_urls', namespace='appauth_api')),
 
-    # --- Posts
-    # url(r'^posts/', include('posts.urls', namespace='posts')),
-    # url(r'^api/%s/posts/' % v1, include('posts.api_urls', namespace='posts_api')),
+    # --- Products
+    url(r'^api/products/', include('products.api_urls', namespace='products')),
 
     # --- Errorlog
     url(r'^logs/', include('simple_django_logger.urls', namespace='logger')),
