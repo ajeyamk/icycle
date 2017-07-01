@@ -103,7 +103,7 @@ class RedeemCoupoun(APIView):
     authentication_classes = (SessionAuthenticationAllMethods,)
 
     def get(self, request):
-        if request.user.user_point > 50.0:
+        if request.user.user_point >= 50.0:
             request.user.user_point = 0
             request.user.save()
             return Response(
