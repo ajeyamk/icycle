@@ -50,8 +50,8 @@ class ProductDropAPI(APIView):
             return Response(
                 ResponseHandler.get_result(FailureMessages.INVALID_INPUT.value), status=status.HTTP_400_BAD_REQUEST)
         if not product.is_active:
-            user_product = UserProducts.objects.get(product=product)
-            if user_product.status == UserProducts.PRODUCT_STATUS[0][0]:
+            user_product = UserProducts.objects.filter(product=product, status=UserProducts.PRODUCT_STATUS[0][0])
+            if user_product:
                 new_user_point = UserProducts.calculate_user_points(user_product)
                 user_product.status = UserProducts.PRODUCT_STATUS[2][0]
                 user_product.save()
