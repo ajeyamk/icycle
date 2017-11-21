@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Django iCycle 
 
 ### Version 1.0.0
@@ -191,3 +192,7 @@ This application uses Sphinx for complete documentation and Django Rest Swagger 
 * Sphinx: Please have a look at /_docs/sphinx/_build/html/index.html for Sphinx documentation.
 
 * Swagger: Please visit 127.0.0.1:8000/api/ for Swagger documentation
+=======
+# icycle
+Smart inventory management system adjunct with loyalty system that promotes user to recycle non-degradable materials, with a mobile application built on MySQL, Django and QR technology.
+>>>>>>> ef5cf712d2dcf6bc45eaf6aab28cfa12ba66ea11
