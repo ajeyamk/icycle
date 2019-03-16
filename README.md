@@ -5,7 +5,9 @@
 
 ### About
 
-A boilerplate for Django Project. There is sample app named as Posts for reference.
+iCycle is a smart inventory management system adjunct with a loyalty system that's intended to promote a user to recycle non-degradable materials. 
+
+iCycle was designed, developed at a hackathon in a day that consisted of a mobile application built on MySQL, Django and QR technology.
 
 The project is AWS ready and can be deployed in minutes.
 
