@@ -9,13 +9,6 @@ A boilerplate for Django Project. There is sample app named as Posts for referen
 
 The project is AWS ready and can be deployed in minutes.
 
-The project is also ready for scrapy, haystack, mongodb and celery. These can be configured in minutes as well.
-
-Look at Swagger docs for API details at /api/#/
-
-### Posts App
-A sample app for reference, which covers all the major aspects of Django development.
-
 #### Structure
 * **models.py:** Where all models live.
 * **serializers.py:** Django Rest Framework serializers.
@@ -190,8 +183,6 @@ Not required for now. Check _docs in case if needed.
 This application uses Sphinx for complete documentation and Django Rest Swagger for documenting APIs.
 
 * Sphinx: Please have a look at /_docs/sphinx/_build/html/index.html for Sphinx documentation.
-
-* Swagger: Please visit 127.0.0.1:8000/api/ for Swagger documentation
 =======
 # icycle
 Smart inventory management system adjunct with loyalty system that promotes user to recycle non-degradable materials, with a mobile application built on MySQL, Django and QR technology.
